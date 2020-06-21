@@ -60,7 +60,10 @@ class MessageHandler(Message):
 
     def extract_text(self, message):
         fmt = self.config['default'].get('format', '%(body)s')
-        body = message.get_payload()
+        if message.is_multipart() :
+            body = message.get_payload(i=0)
+        else :
+            body = message.get_payload()
         subject = message['Subject']
         return fmt % dict(body=body, subject=subject)
 
