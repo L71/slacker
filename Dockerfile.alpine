@@ -1,0 +1,14 @@
+# Build from Python 3.8 Alpine Linux image
+# 
+FROM python:3.8-alpine
+RUN apk update --no-cache
+RUN apk add gcc git libc-dev --no-cache
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+COPY handler.py /usr/local/bin/
+ENV PYTHONPATH ./
+RUN mkdir -p /etc/slacker
+USER nobody:nogroup
+CMD ["aiosmtpd", "-n", "-l", "0.0.0.0:8025", "-c", "handler.MessageHandler"]
+EXPOSE 8025
+

@@ -1,5 +1,26 @@
 # Slacker
 
+Fork from https://github.com/ont/slacker 
+Added Docker file for building image on Alpine Linux
+Added Kubernetes deployment file, I'm running this on microk8s. 
+
+Docker image is on Docker Hub, l4rs71/slacker-alpine:latest 
+("latest" != frequently updated!)
+
+Build: 
+```bash
+docker build -t slacker-alpine -f $( pwd )/Dockerfile.alpine .
+```
+
+Run in docker:
+```bash
+docker run -d --restart=always --name=slacker-alpine -v /path/to/your/slacker-config.yml:/etc/slacker/config.yml -p 25:8025 slacker-alpine:latest
+```
+
+Original README contents follow below:
+
+# Slacker
+
 Slacker is simple email-to-slack gateway. It support basic rules for routing
 messages to different slack channels from different bots.
 

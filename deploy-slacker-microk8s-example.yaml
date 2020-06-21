@@ -1,0 +1,95 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: slacker
+  labels: 
+    app: slacker
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: slacker
+  namespace: slacker
+data:
+  config.yml: |
+    # default values for channel, bot name, avatar url, slack token and debug mode
+    default:
+        channel: '#alerts'
+        username: slacker
+        icon_url: ''
+        slack_token: xoxb-000000000000-000000000000-aaaaaaaaaaaaaaaaaaaaaa
+        debug: false
+    # list of rules
+    rules:
+        - name: root rule
+          from: root@.*
+          options:
+              username: root
+              channel: '#alerts-second'
+              icon_url: ''
+              debug: false
+        - name: unifi rule
+          from: .*@unifi.home.lan
+          options:
+              username: root
+              channel: '#unifi'
+              icon_url: ''
+              debug: false
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slacker
+  namespace: slacker
+spec:
+  selector:
+    matchLabels:
+      app: slacker
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: slacker
+    spec:
+      containers:
+      - name: slacker
+        image: l4rs71/slacker-alpine
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 8025
+        volumeMounts:
+        - mountPath: /etc/slacker
+          name: config-volume
+          readOnly: true
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: config.yml
+            path: config.yml
+          name: slacker
+        name: config-volume
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: slacker
+  namespace: slacker
+spec:
+  selector:
+    app: slacker
+  ports:
+  - port: 25
+    targetPort: 8025
+  type: LoadBalancer
+  externalIPs:
+    - <ip of worker node 1>
+    - <ip of worker node 2>
+    
