@@ -1,7 +1,9 @@
 # Slacker
 
 Fork from https://github.com/ont/slacker 
+
 Added Docker file for building image on Alpine Linux
+
 Added Kubernetes deployment file, I'm running this on microk8s. 
 
 Docker image is on Docker Hub, l4rs71/slacker-alpine:latest 
