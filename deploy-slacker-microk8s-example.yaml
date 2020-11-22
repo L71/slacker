@@ -88,7 +88,6 @@ spec:
   ports:
   - port: 25
     targetPort: 8025
-  type: LoadBalancer
   externalIPs:
     - <ip of worker node 1>
     - <ip of worker node 2>
