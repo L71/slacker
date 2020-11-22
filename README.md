@@ -2,9 +2,11 @@
 
 Fork from https://github.com/ont/slacker 
 
-Added Docker file for building image on Alpine Linux
-
-Added Kubernetes deployment file, I'm running this on microk8s. 
+Modifications:
+  * Added Docker file for building image on Alpine Linux and run app as nobody
+  * Added Kubernetes deployment file example, I'm running this on microk8s. 
+  * Change to decode multipart messages (well, part #1 of them anyway :) ) 
+  * Change to reload config at every message
 
 Docker image is on Docker Hub, l4rs71/slacker-alpine:latest 
 ("latest" != frequently updated!)

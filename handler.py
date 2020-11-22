@@ -22,6 +22,8 @@ class MessageHandler(Message):
         """ This method will be called by aiosmtpd server when new mail will
             arrived.
         """
+        config = os.getenv('CONFIG', '/etc/slacker/config.yml')
+        self.config = yaml.load(open(config))
         options = self.process_rules(message)
 
         print('matched', options)
